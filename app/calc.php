@@ -1,40 +1,40 @@
 <?php
 require_once dirname(__FILE__).'/../config.php';
+require_once _ROOT_PATH.'/lib/smarty/smarty.class.php';
+//include _ROOT_PATH.'/app/security/check.php';
 
-include _ROOT_PATH.'/app/security/check.php';
-
-function pobierzParametry(&$kwotaTankowania,&$cenaZaLitr,&$stanPoczatkowy,&$dataTankowania){
-	$kwotaTankowania = isset($_REQUEST['kwotaTankowania']) ? $_REQUEST['kwotaTankowania'] : null;
-	$cenaZaLitr = isset($_REQUEST['cenaZaLitr']) ? $_REQUEST['cenaZaLitr'] : null;
-        $stanPoczatkowy = isset($_REQUEST['stanPoczatkowy']) ? $_REQUEST['stanPoczatkowy'] : null;
-	$dataTankowania = isset($_REQUEST['dataTankowania']) ? $_REQUEST['dataTankowania'] : null;
+function pobierzParametry(&$form){
+    $form['kwotaTankowania'] = isset($_REQUEST['kwotaTankowania']) ? $_REQUEST['kwotaTankowania'] : null;
+    $form['cenaZaLitr'] = isset($_REQUEST['cenaZaLitr']) ? $_REQUEST['cenaZaLitr'] : null;
+    $form['stanPoczatkowy'] = isset($_REQUEST['stanPoczatkowy']) ? $_REQUEST['stanPoczatkowy'] : null;
+    $form['dataTankowania'] = isset($_REQUEST['dataTankowania']) ? $_REQUEST['dataTankowania'] : null;
 }
 
-function czyWpisaneWartosci(&$kwotaTankowania,&$cenaZaLitr,&$stanPoczatkowy,&$dataTankowania)
+function czyWpisaneWartosci(&$form)
 {
-    return (isset($kwotaTankowania) && isset($cenaZaLitr) && isset($stanPoczatkowy) && isset($dataTankowania));
+    return (isset($form['kwotaTankowania']) && isset($form['cenaZaLitr']) && isset($form['stanPoczatkowy']) && isset($form['dataTankowania']));
 }
 
-function waliduj(&$kwotaTankowania,&$cenaZaLitr,&$stanPoczatkowy,&$dataTankowania,&$messages){
+function waliduj(&$form,&$messages){
 	
         $walidacja = true;
         
-        if ($kwotaTankowania == "")
+        if ($form['kwotaTankowania'] == "")
         {
             $messages [] = 'Nie podano kwoty tankowania!';
             $walidacja = false;
 	}
-	if ($cenaZaLitr == "")
+	if ($form['cenaZaLitr'] == "")
         {
             $messages [] = 'Nie podano ceny za litr!';
             $walidacja = false;
 	}
-        if ($stanPoczatkowy == "")
+        if ($form['stanPoczatkowy'] == "")
         {
             $messages [] = 'Nie podano stanu licznika!';
             $walidacja = false;
 	}
-	if ($dataTankowania == "")
+	if ($form['dataTankowania'] == "")
         {
             $messages [] = 'Nie podano daty tankowania!';
             $walidacja = false;
@@ -45,19 +45,19 @@ function waliduj(&$kwotaTankowania,&$cenaZaLitr,&$stanPoczatkowy,&$dataTankowani
             return false;
         }
 
-        $kwotaTankowania = floatval(str_replace(',', '.', $kwotaTankowania));
-	$cenaZaLitr = floatval(str_replace(',', '.', $cenaZaLitr));
-	if (!is_float($kwotaTankowania))
+        $form['kwotaTankowania'] = floatval(str_replace(',', '.', $form['kwotaTankowania']));
+	$form['cenaZaLitr'] = floatval(str_replace(',', '.', $form['cenaZaLitr']));
+	if (!is_float($form['kwotaTankowania']))
         {
             $messages [] = 'Kwota tankowania powinna być liczbą!';
             $walidacja = false;
 	}
-	if (!is_float($cenaZaLitr))
+	if (!is_float($form['cenaZaLitr']))
         {
             $messages [] = 'Cena za litr powinna być liczbą!';
             $walidacja = false;
 	}	
-        if (!is_numeric($stanPoczatkowy))
+        if (!is_numeric($form['stanPoczatkowy']))
         {
             $messages [] = 'Stan licznika powinna być liczbą!';
             $walidacja = false;
@@ -73,22 +73,22 @@ function waliduj(&$kwotaTankowania,&$cenaZaLitr,&$stanPoczatkowy,&$dataTankowani
         }
 }
 
-function process(&$kwotaTankowania,&$cenaZaLitr,&$stanPoczatkowy,&$dataTankowania,&$messages,&$result){
+function process(&$form,&$messages,&$result){
 	global $role;
 	
-	$kwotaTankowania = floatval($kwotaTankowania);
-	$cenaZaLitr = floatval($cenaZaLitr);
-        $stanPoczatkowy = intval($stanPoczatkowy);
-        $dataTankowania = strval($dataTankowania);
+	$form['kwotaTankowania'] = floatval($form['kwotaTankowania']);
+	$form['cenaZaLitr'] = floatval($form['cenaZaLitr']);
+        $form['stanPoczatkowy'] = intval($form['stanPoczatkowy']);
+        $form['stanPoczatkowy'] = strval($form['stanPoczatkowy']);
 	
-        $result = $kwotaTankowania / $cenaZaLitr;
+        $result = $form['kwotaTankowania'] / $form['cenaZaLitr'];
 }
 
-function zwalidujIWykonaj(&$kwotaTankowania,&$cenaZaLitr,&$stanPoczatkowy,$dataTankowania,&$messages,&$result)
+function zwalidujIWykonaj(&$form,&$messages,&$result)
 {
-    if (waliduj($kwotaTankowania,$cenaZaLitr,$stanPoczatkowy,$dataTankowania,$messages))
+    if (waliduj($form,$messages))
     {
-        process($kwotaTankowania,$cenaZaLitr,$stanPoczatkowy,$dataTankowania,$messages,$result);
+        process($form,$messages,$result);
     }
 }
 
@@ -99,10 +99,20 @@ $dataTankowania = null;
 $result = null;
 $messages = array();
 
-pobierzParametry($kwotaTankowania,$cenaZaLitr,$stanPoczatkowy,$dataTankowania);
-if (czyWpisaneWartosci($kwotaTankowania, $cenaZaLitr, $stanPoczatkowy, $dataTankowania))
+pobierzParametry($form);
+if (czyWpisaneWartosci($form))
 {
-    zwalidujIWykonaj($kwotaTankowania, $cenaZaLitr, $stanPoczatkowy, $dataTankowania, $messages, $result);
+    zwalidujIWykonaj($form, $messages, $result);
 }
 
-include 'calc_view.php';
+$smarty = new Smarty();
+
+$smarty->assign('app_url',_APP_URL);
+$smarty->assign('root_path',_ROOT_PATH);
+$smarty->assign('page_title','Kalkulator spalania - wprowadzanie danych');
+
+$smarty->assign('form',$form);
+$smarty->assign('result',$result);
+$smarty->assign('messages',$messages);
+
+$smarty->display(_ROOT_PATH.'/app/calc.tpl');

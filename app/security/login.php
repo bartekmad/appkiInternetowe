@@ -1,13 +1,12 @@
 <?php
 require_once dirname(__FILE__).'/../../config.php';
+require_once _ROOT_PATH.'/lib/smarty/smarty.class.php';
 
-//pobranie parametrów
 function getParamsLogin(&$form){
 	$form['login'] = isset ($_REQUEST ['login']) ? $_REQUEST ['login'] : null;
 	$form['pass'] = isset ($_REQUEST ['pass']) ? $_REQUEST ['pass'] : null;
 }
 
-//walidacja parametrów z przygotowaniem zmiennych dla widoku
 function validateLogin(&$form,&$messages){
 	// sprawdzenie, czy parametry zostały przekazane
 	if ( ! (isset($form['login']) && isset($form['pass']))) {
@@ -44,22 +43,25 @@ function validateLogin(&$form,&$messages){
 	return false; 
 }
 
-//inicjacja potrzebnych zmiennych
 $form = array();
 $messages = array();
 
-// pobierz parametry i podejmij akcję
 getParamsLogin($form);
 
-if (!validateLogin($form,$messages)) {
-	//jeśli błąd logowania to wyświetl formularz z tekstami z $messages
-	include _ROOT_PATH.'/app/security/login_view.php';
-} else { 
-	//ok przekieruj lub "forward" na stronę główną
-	
-	//redirect - przeglądarka dostanie ten adres do "przejścia" na niego (wysłania kolejnego żądania)
-	header("Location: "._APP_URL);
-	
-	//"forward"
-	//include _ROOT_PATH.'/index.php';
+$smarty = new Smarty();
+
+$smarty->assign('app_url',_APP_URL);
+$smarty->assign('root_path',_ROOT_PATH);
+$smarty->assign('page_title','Kalkulator spalania - logowanie');
+
+$smarty->assign('form',$form);
+$smarty->assign('messages',$messages);
+
+if (!validateLogin($form,$messages))
+{
+    $smarty->display(_ROOT_PATH.'/app/security/login.tpl');
+}
+else
+{ 
+    header("Location: "._APP_URL);
 }

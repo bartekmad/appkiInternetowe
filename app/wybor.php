@@ -1,23 +1,13 @@
 <?php
 require_once dirname(__FILE__).'/../config.php';
+require_once _ROOT_PATH.'/lib/smarty/smarty.class.php';
+//include _ROOT_PATH.'/app/security/check.php';
 
-include _ROOT_PATH.'/app/security/check.php';
+$smarty = new Smarty();
+
+$smarty->assign('app_url',_APP_URL);
+$smarty->assign('root_path',_ROOT_PATH);
+$smarty->assign('page_title','Kalkulator spalania - wprowadzanie danych');
+
+$smarty->display(_ROOT_PATH.'/app/wybor.tpl');
 ?>
-
-<!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
-<head>
-	<meta charset="utf-8" />
-	<title>Wybór operacji</title>
-	<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-</head>
-<body>
-
-<div style="width:90%; margin: 2em auto;">
-	<a href="<?php print(_APP_ROOT); ?>/app/calc.php" class="pure-button">Przejdź do wprowadzania danych</a>
-        <a href="<?php print(_APP_ROOT); ?>/app/wyswietlanie.php" class="pure-button">Przejdź do wyświetlania danych</a>
-	<a href="<?php print(_APP_ROOT); ?>/app/security/logout.php" class="pure-button pure-button-active">Wyloguj</a>
-</div>
-
-</body>
-</html>
