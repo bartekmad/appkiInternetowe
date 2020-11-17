@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 3.1.34-dev-7, created on 2020-11-17 12:15:17
-  from 'C:\wamp64\www\appkiInternetowe\templates\main.tpl' */
+/* Smarty version 3.1.34-dev-7, created on 2020-11-17 14:37:44
+  from 'C:\wamp64\www\appkiInternetowe\templates\main.html' */
 
 /* @var Smarty_Internal_Template $_smarty_tpl */
 if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   'version' => '3.1.34-dev-7',
-  'unifunc' => 'content_5fb3bed5bdc655_79445478',
+  'unifunc' => 'content_5fb3e038093021_38205605',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
-    '24644568dff46d3ee42a0159b07179b0a9c6030f' => 
+    'cf9796da1f5999087495a0d00aefae9be7f8bbee' => 
     array (
-      0 => 'C:\\wamp64\\www\\appkiInternetowe\\templates\\main.tpl',
-      1 => 1490288994,
+      0 => 'C:\\wamp64\\www\\appkiInternetowe\\templates\\main.html',
+      1 => 1605623857,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->_decodeProperties($_smarty_tpl, array (
   array (
   ),
 ),false)) {
-function content_5fb3bed5bdc655_79445478 (Smarty_Internal_Template $_smarty_tpl) {
+function content_5fb3e038093021_38205605 (Smarty_Internal_Template $_smarty_tpl) {
 $_smarty_tpl->_loadInheritance();
 $_smarty_tpl->inheritance->init($_smarty_tpl, false);
 ?>
@@ -34,7 +34,7 @@ $_smarty_tpl->inheritance->init($_smarty_tpl, false);
 	<title><?php echo (($tmp = @$_smarty_tpl->tpl_vars['page_title']->value)===null||$tmp==='' ? "Tytuł domyślny" : $tmp);?>
 </title>
 	<link rel="stylesheet" href="https://unpkg.com/purecss@0.6.2/build/pure-min.css" integrity="sha384-UQiGfs9ICog+LwheBSRCt1o5cbyKIHbwjWscjemyBMT9YCUMZffs6UqUTd0hObXD" crossorigin="anonymous">
-	<link rel="stylesheet" href="<?php echo $_smarty_tpl->tpl_vars['app_url']->value;?>
+	<link rel="stylesheet" href="<?php echo $_smarty_tpl->tpl_vars['conf']->value->app_url;?>
 /css/style.css">	
 </head>
 <body>
@@ -42,17 +42,11 @@ $_smarty_tpl->inheritance->init($_smarty_tpl, false);
 <div class="header">
 	<h1><?php echo (($tmp = @$_smarty_tpl->tpl_vars['page_title']->value)===null||$tmp==='' ? "Tytuł domyślny" : $tmp);?>
 </h1>
-	<h2><?php echo (($tmp = @$_smarty_tpl->tpl_vars['page_header']->value)===null||$tmp==='' ? "Tytuł domyślny" : $tmp);?>
-</h1>
-	<p>
-		<?php echo (($tmp = @$_smarty_tpl->tpl_vars['page_description']->value)===null||$tmp==='' ? "Opis domyślny" : $tmp);?>
-
-	</p>
 </div>
 
 <div class="content">
 <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_572606175fb3bed5bb31d5_01018739', 'content');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_14441276785fb3e03806a7e3_00286738', 'content');
 ?>
 
 </div><!-- content -->
@@ -60,7 +54,7 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_572606175fb3bed5bb
 <div class="footer">
 	<p>
 <?php 
-$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_14605788705fb3bed5bc7a98_87602544', 'footer');
+$_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_9769552675fb3e03807f882_21242641', 'footer');
 ?>
 
 	</p>
@@ -72,32 +66,34 @@ $_smarty_tpl->inheritance->instanceBlock($_smarty_tpl, 'Block_14605788705fb3bed5
 </body>
 </html><?php }
 /* {block 'content'} */
-class Block_572606175fb3bed5bb31d5_01018739 extends Smarty_Internal_Block
+class Block_14441276785fb3e03806a7e3_00286738 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'content' => 
   array (
-    0 => 'Block_572606175fb3bed5bb31d5_01018739',
+    0 => 'Block_14441276785fb3e03806a7e3_00286738',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
 ?>
- Domyślna treść zawartości .... <?php
+
+<?php
 }
 }
 /* {/block 'content'} */
 /* {block 'footer'} */
-class Block_14605788705fb3bed5bc7a98_87602544 extends Smarty_Internal_Block
+class Block_9769552675fb3e03807f882_21242641 extends Smarty_Internal_Block
 {
 public $subBlocks = array (
   'footer' => 
   array (
-    0 => 'Block_14605788705fb3bed5bc7a98_87602544',
+    0 => 'Block_9769552675fb3e03807f882_21242641',
   ),
 );
 public function callBlock(Smarty_Internal_Template $_smarty_tpl) {
 ?>
- Domyślna treść stopki .... <?php
+
+<?php
 }
 }
 /* {/block 'footer'} */
