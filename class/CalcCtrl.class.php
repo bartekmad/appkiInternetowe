@@ -4,20 +4,22 @@ require_once $conf->root_path.'/class/Messages.class.php';
 require_once $conf->root_path.'/class/CalcForm.class.php';
 require_once $conf->root_path.'/class/CalcResult.class.php';
 
-class CalcCtrl{
-    
+class CalcCtrl
+{
     private $form;
     private $result;
     private $messages;
+    private $conn;
     
     public function __construct()
     {
         $this->form = new CalcForm();
         $this->result = new CalcResult();
         $this->messages = new Messages();
+        $this->conn = new mysqli("localhost", "root", "", "KALKULATOR");
     }
     
-    public function zwalidujIWykonaj()
+    public function wykonaj()
     {
         $this->pobierzParametry();
         if ($this->czyWpisaneWartosci())
@@ -90,17 +92,58 @@ class CalcCtrl{
             $this->messages->addError('Stan licznika powinna być liczbą!');
             $walidacja = false;
         }
-
+        
+        $query = "SELECT STAN_START, DATA FROM DANE_TANKOWAN ORDER BY ID DESC LIMIT 1";
+        $wynik = $this->conn->query($query);
+        if ($wynik->num_rows > 0)
+        {
+            while($dana = $wynik->fetch_assoc())
+            {
+                if ($this->form->stanPoczatkowy < $dana["STAN_START"])
+                {
+                    $this->messages->addError('Stan licznika musi być większy od poprzedniego!');
+                    $walidacja = false;
+                }
+                if ($this->form->dataTankowania < $dana["DATA"])
+                {
+                    $this->messages->addError('Data tankowania nie może być wcześniejsza od poprzedniej!');
+                    $walidacja = false;
+                }
+            }
+        }
         return $walidacja;
     }
-
+    
     private function wykonajZadanie(){
-        $this->form->kwotaTankowania = floatval($this->form->kwotaTankowania);
-        $this->form->cenaZaLitr = floatval($this->form->cenaZaLitr);
-        $this->form->stanPoczatkowy = intval($this->form->stanPoczatkowy);
-        $this->form->stanPoczatkowy = strval($this->form->stanPoczatkowy);
+        $kwotaTankowania = floatval($this->form->kwotaTankowania);
+        $cenaZaLitr = floatval($this->form->cenaZaLitr);
+        $stanPoczatkowy = intval($this->form->stanPoczatkowy);
+        $dataTankowania = date($this->form->dataTankowania);
+        
+        $query2 = "SELECT ID, STAN_START FROM DANE_TANKOWAN ORDER BY ID DESC LIMIT 1";
+        $wynik = $this->conn->query($query2);
+        if ($wynik->num_rows > 0)
+        {
+            while($dana = $wynik->fetch_assoc())
+            {
+                if ($stanPoczatkowy > $dana["STAN_START"])
+                {
+                    $query3 = "UPDATE DANE_TANKOWAN SET STAN_STOP = '{$stanPoczatkowy}' WHERE ID = '{$dana["ID"]}'";
+                    $this->conn->query($query3);
+                }
+            }
+        }
+        
+        $insert = "INSERT INTO DANE_TANKOWAN (KWOTA, CENA_LITR, STAN_START, DATA) VALUES ('{$kwotaTankowania}','{$cenaZaLitr}','{$stanPoczatkowy}','{$dataTankowania}')";
 
-        $this->result = $this->form->kwotaTankowania / $this->form->cenaZaLitr;
+        if ($this->conn->query($insert) == TRUE)
+        {
+            $this->result = "dodane";
+        }
+        else
+        {
+           $this->result = "kisznik";
+        }
     }
 
     private function generujWidok()
