@@ -146,7 +146,7 @@ class CalcCtrl
         }
     }
 
-    private function generujWidok()
+    public function generujWidok()
     {
         global $conf;
         $smarty = new Smarty();

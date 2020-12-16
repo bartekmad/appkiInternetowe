@@ -2,11 +2,11 @@
 
 {block name=content}
 
-<div style="width:90%; margin: 2em auto;">
-    <a href="{$conf->app_url}/app/wyswietlanie.php" class="pure-button">Przejdź do wyświetlania danych</a>
-</div>
+<form action="{$conf->action_url}wyswietlDane" method="post">
+    <button type="submit" class="pure-button pure-button-primary">Przejdź do wyświetlania danych</button>
+</form>
 
-<form class="pure-form pure-form-stacked" action="{$conf->app_url}/app/calc.php" method="post">
+<form class="pure-form pure-form-stacked" action="{$conf->action_url}calcCompute" method="post">
     <fieldset>
         <label for="id_kwotaTankowania">Kwota tankowania: </label>
         <input id="id_kwotaTankowania" type="text" name="kwotaTankowania" value="{$form->kwotaTankowania}">

@@ -2,9 +2,9 @@
 
 {block name=content}
 
-<div style="width:90%; margin: 2em auto;">
-    <a href="{$conf->app_url}/app/calc.php" class="pure-button">Przejdź do wprowadzania danych</a>
-</div>
+<form action="{$conf->action_url}wprowadzDane" method="post">
+    <button type="submit" class="pure-button pure-button-primary">Przejdź do wprowadzania danych</button>
+</form>
 
 <table class="tg">
     <thead>
