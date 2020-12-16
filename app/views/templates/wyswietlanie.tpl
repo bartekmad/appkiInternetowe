@@ -1,4 +1,4 @@
-{extends file="../templates/main.html"}
+{extends file="main.html"}
 
 {block name=content}
 

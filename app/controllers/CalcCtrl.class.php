@@ -1,21 +1,17 @@
 <?php
-require_once $conf->root_path.'/lib/smarty/Smarty.class.php';
-require_once $conf->root_path.'/class/Messages.class.php';
-require_once $conf->root_path.'/class/CalcForm.class.php';
-require_once $conf->root_path.'/class/CalcResult.class.php';
+require_once 'CalcForm.class.php';
+require_once 'CalcResult.class.php';
 
 class CalcCtrl
 {
     private $form;
     private $result;
-    private $messages;
     private $conn;
     
     public function __construct()
     {
         $this->form = new CalcForm();
         $this->result = new CalcResult();
-        $this->messages = new Messages();
         $this->conn = new mysqli("localhost", "root", "", "KALKULATOR");
     }
     
@@ -51,22 +47,22 @@ class CalcCtrl
 
         if ($this->form->kwotaTankowania == "")
         {
-            $this->messages->addError('Nie podano kwoty tankowania!');
+            getMessages()->addError('Nie podano kwoty tankowania!');
             $walidacja = false;
         }
         if ($this->form->cenaZaLitr == "")
         {
-            $this->messages->addError('Nie podano ceny za litr!');
+            getMessages()->addError('Nie podano ceny za litr!');
             $walidacja = false;
         }
         if ($this->form->stanPoczatkowy == "")
         {
-            $this->messages->addError('Nie podano stanu licznika!');
+            getMessages()->addError('Nie podano stanu licznika!');
             $walidacja = false;
         }
         if ($this->form->dataTankowania == "")
         {
-            $this->messages->addError('Nie podano daty tankowania!');
+            getMessages()->addError('Nie podano daty tankowania!');
             $walidacja = false;
         }
 
@@ -79,17 +75,17 @@ class CalcCtrl
         $this->form->cenaZaLitr = floatval(str_replace(',', '.', $this->form->cenaZaLitr));
         if (!is_float($this->form->kwotaTankowania))
         {
-            $this->messages->addError('Kwota tankowania powinna być liczbą!');
+            getMessages()->addError('Kwota tankowania powinna być liczbą!');
             $walidacja = false;
         }
         if (!is_float($this->form->cenaZaLitr))
         {
-            $this->messages->addError('Cena za litr powinna być liczbą!');
+            getMessages()->addError('Cena za litr powinna być liczbą!');
             $walidacja = false;
         }	
         if (!is_numeric($this->form->stanPoczatkowy))
         {
-            $this->messages->addError('Stan licznika powinna być liczbą!');
+            getMessages()->addError('Stan licznika powinna być liczbą!');
             $walidacja = false;
         }
         
@@ -101,12 +97,12 @@ class CalcCtrl
             {
                 if ($this->form->stanPoczatkowy < $dana["STAN_START"])
                 {
-                    $this->messages->addError('Stan licznika musi być większy od poprzedniego!');
+                    getMessages()->addError('Stan licznika musi być większy od poprzedniego!');
                     $walidacja = false;
                 }
                 if ($this->form->dataTankowania < $dana["DATA"])
                 {
-                    $this->messages->addError('Data tankowania nie może być wcześniejsza od poprzedniej!');
+                    getMessages()->addError('Data tankowania nie może być wcześniejsza od poprzedniej!');
                     $walidacja = false;
                 }
             }
@@ -114,12 +110,13 @@ class CalcCtrl
         return $walidacja;
     }
     
+    
     private function wykonajZadanie(){
         $kwotaTankowania = floatval($this->form->kwotaTankowania);
         $cenaZaLitr = floatval($this->form->cenaZaLitr);
         $stanPoczatkowy = intval($this->form->stanPoczatkowy);
         $dataTankowania = date($this->form->dataTankowania);
-        
+       
         $query2 = "SELECT ID, STAN_START FROM DANE_TANKOWAN ORDER BY ID DESC LIMIT 1";
         $wynik = $this->conn->query($query2);
         if ($wynik->num_rows > 0)
@@ -148,15 +145,16 @@ class CalcCtrl
 
     public function generujWidok()
     {
-        global $conf;
-        $smarty = new Smarty();
+        getSmarty()->assign('page_title','Kalkulator spalania - wprowadzanie danych');
+        getSmarty()->assign('form',$this->form);
 
-        $smarty->assign('conf',$conf);
-        $smarty->assign('page_title','Kalkulator spalania - wprowadzanie danych');
-        $smarty->assign('form',$this->form);
-        $smarty->assign('result',$this->result);
-        $smarty->assign('messages',$this->messages);
+        if (!is_string($this->result))
+        {
+            $this->result = "wprowadz dane";
+        }
+            
+        getSmarty()->assign('result',$this->result);
         
-        $smarty->display($conf->root_path.'/templates/calc.tpl');
+        getSmarty()->display('calc.tpl');
     }
 }
