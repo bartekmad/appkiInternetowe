@@ -1,6 +1,7 @@
-<?php
-require_once 'CalcForm.class.php';
-require_once 'CalcResult.class.php';
+<?php namespace app\controllers;
+
+use app\forms\CalcForm;
+use app\transfer\CalcResult;
 
 class CalcCtrl
 {
@@ -12,7 +13,7 @@ class CalcCtrl
     {
         $this->form = new CalcForm();
         $this->result = new CalcResult();
-        $this->conn = new mysqli("localhost", "root", "", "KALKULATOR");
+        $this->conn = new \mysqli("localhost", "root", "", "KALKULATOR");
     }
     
     public function wykonaj()
