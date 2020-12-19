@@ -26,7 +26,7 @@ class CalcCtrl
                 $this->wykonajZadanie();
             }
         }
-        $this->generujWidok();
+        $this->wprowadzanie();
     }
     
     private function pobierzParametry()
@@ -112,7 +112,7 @@ class CalcCtrl
     }
     
     
-    private function wykonajZadanie(){
+    private function action_wykonajZadanie(){
         $kwotaTankowania = floatval($this->form->kwotaTankowania);
         $cenaZaLitr = floatval($this->form->cenaZaLitr);
         $stanPoczatkowy = intval($this->form->stanPoczatkowy);
@@ -144,8 +144,9 @@ class CalcCtrl
         }
     }
 
-    public function generujWidok()
+    public function action_wprowadzanie()
     {
+        getSmarty()->assign('user',unserialize($_SESSION['user']));
         getSmarty()->assign('page_title','Kalkulator spalania - wprowadzanie danych');
         getSmarty()->assign('form',$this->form);
 

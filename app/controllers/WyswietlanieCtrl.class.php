@@ -16,7 +16,7 @@ class WyswietlanieCtrl
         $this->conn = new \mysqli("localhost", "root", "", "KALKULATOR");
     }
     
-    public function wykonaj()
+    public function action_wyswietl()
     {
         $this->pobierzDane();
         $this->generujWidok();
@@ -30,6 +30,7 @@ class WyswietlanieCtrl
     
     private function generujWidok()
     {
+        getSmarty()->assign('user',unserialize($_SESSION['user']));
         getSmarty()->assign('page_title','Kalkulator spalania - wyświetlanie danych');
         getSmarty()->assign('form',$this->form);
         getSmarty()->assign('result',$this->result);
