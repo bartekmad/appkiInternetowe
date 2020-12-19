@@ -1,4 +1,4 @@
-{extends file="main.html"}
+{extends file="main.tpl"}
 
 {block name=content}
 
@@ -20,18 +20,9 @@
     <button type="submit" class="pure-button pure-button-primary">Wpisz dane do bazy</button>
 </form>
 
-<div class="messages">
-    {if $messages->isError()}
-        <h4>Wystąpiły błędy: </h4>
-        <ol class="err">
-            {foreach $messages->getErrors() as $err}
-                {strip}
-                    <li>{$err}</li>
-                {/strip}
-            {/foreach}
-        </ol>
-    {/if}
-
+{include file='messages.tpl'}
+    
+<div class="messages inf">
     {if $result}
         <h4>Wynik</h4>
         <p class="res">
