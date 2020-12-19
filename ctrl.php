@@ -1,29 +1,19 @@
 <?php
 require_once 'init.php';
 
+getConf()->login_action = 'login';
+
 switch ($action) {
     default :
-        include 'check.php';
-        $ctrl = new app\controllers\CalcCtrl ();
-        $ctrl->generujWidok ();
-    break;
-    case 'login' :
-	$ctrl = new app\controllers\LoginCtrl();
-	$ctrl->doLogin();
-	break;
+        control('app\\controllers', 'CalcCtrl',	'generujWidok', ['user','admin']);
     case 'calcCompute' :
-        include 'check.php';
-        $ctrl = new app\controllers\CalcCtrl ();
-        $ctrl->wykonaj ();
-    break;
-    case 'wyswietlDane' :
-        include 'check.php';
-        $ctrl = new app\controllers\WyswietlanieCtrl ();
-        $ctrl->wykonaj ();
-    break;
+        control(null, 'CalcCtrl', 'wykonaj', ['user','admin']);
     case 'wprowadzDane' :
-        include 'check.php';
-        $ctrl = new app\controllers\CalcCtrl ();
-        $ctrl->generujWidok ();
-    break;
+        control(null, 'CalcCtrl', 'generujWidok', ['user','admin']);
+    case 'wyswietlDane' :
+        control('app\\controllers', 'WyswietlanieCtrl',	'wykonaj', ['user','admin']);
+    case 'login' :
+	control('app\\controllers', 'LoginCtrl', 'doLogin');
+    case 'logout' : 
+	control(null, 'LoginCtrl', 'doLogout', ['user','admin']);
 }
